@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yearbook SMPN 5 Cilegon — WE WERE HERE (Ultra Luxe E-Book Reader)</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0c1015;
+      font-family: 'Montserrat', sans-serif;
+      color: #343434;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    :root {
+      --navy: #202D3C;
+      --navy-dark: #121a24;
+      --ivory: #E9E0D2;
+      --ivory-card: #F4EDE2;
+      --gold: #B59A70;
+      --gold-light: #D8C3A5;
+      --gold-bright: #D4AF37;
+      --charcoal: #343434;
+      --white: #FFFFFF;
+    }
+
+    /* Top Control Header */
+    .reader-header {
+      width: 100%;
+      max-width: 1320px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: var(--navy-dark);
+      border-bottom: 1px solid rgba(181, 154, 112, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ivory);
+      letter-spacing: 1px;
+    }
+
+    .nav-btn {
+      background: var(--navy);
+      border: 1px solid var(--gold);
+      color: var(--ivory);
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      background: var(--gold);
+      color: var(--navy-dark);
+      box-shadow: 0 0 12px rgba(181, 154, 112, 0.5);
+    }
+
+    .spread-select {
+      background: var(--navy);
+      border: 1px solid var(--gold);
+      color: var(--ivory);
+      padding: 7px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      outline: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Book Stage Frame */
+    .reader-stage {
+      width: 100%;
+      max-width: 1320px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .book-container {
+      width: 1260px;
+      height: 720px;
+      position: relative;
+      background: #080c10;
+      border-radius: 6px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.9);
+      border: 1px solid rgba(181, 154, 112, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    /* 3D Book Spine Shadow */
+    .book-spine-shadow {
+      position: absolute;
+      left: 50%;
+      top: 12px;
+      bottom: 12px;
+      width: 32px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.35) 100%);
+      z-index: 25;
+      pointer-events: none;
+    }
+
+    .spread-item {
+      display: none;
+      width: 100%;
+      height: 100%;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spread-item.active {
+      display: flex;
+      animation: pageTurn 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    @keyframes pageTurn {
+      from { opacity: 0; transform: scale(0.985); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Page Styling */
+    .page-card {
+      flex: 1;
+      height: 100%;
+      background: var(--ivory);
+      padding: 22px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(181, 154, 112, 0.4);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.04);
+    }
+
+    .page-card-navy {
+      background: var(--navy);
+      color: var(--ivory);
+      border: 1px solid rgba(181, 154, 112, 0.5);
+    }
+
+    .watermark-bg {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: 150px;
+      font-weight: 900;
+      color: rgba(181, 154, 112, 0.08);
+      line-height: 0.8;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .gold-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      width: 100%;
+      margin: 6px 0;
+    }
+
+    .gold-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Student Profile Grid & Fillers */
+    .student-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .student-card-luxe {
+      background: var(--ivory-card);
+      border: 1px solid rgba(181, 154, 112, 0.6);
+      padding: 6px;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    }
+
+    .student-img-frame {
+      width: 100%;
+      height: 85px;
+      overflow: hidden;
+      margin-bottom: 4px;
+      border: 1px solid var(--gold);
+    }
+
+    .student-img-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .student-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--navy);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .student-class {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Bottom Fillers (Zero Empty Space) */
+    .bottom-filler-box {
+      margin-top: 8px;
+      background: var(--navy);
+      padding: 8px 10px;
+      border-top: 2px solid var(--gold);
+      color: var(--ivory);
+    }
+
+    .film-strip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .film-strip-item {
+      height: 48px;
+      border: 1px solid var(--gold);
+      overflow: hidden;
+    }
+
+    .film-strip-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .teacher-note-box {
+      background: #FFFFFF;
+      padding: 8px 10px;
+      border-left: 3px solid var(--gold);
+      border: 1px solid rgba(181, 154, 112, 0.4);
+      border-left-width: 3px;
+      margin-top: 6px;
+    }
+
+    .footer-page {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(181, 154, 112, 0.4);
+      padding-top: 6px;
+      margin-top: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      z-index: 2;
+    }
+
+    /* Thumbnail Nav Bar */
+    .thumb-bar {
+      width: 100%;
+      max-width: 1320px;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 12px 10px;
+      background: var(--navy-dark);
+      border-top: 1px solid rgba(181, 154, 112, 0.4);
+      margin-bottom: 20px;
+    }
+
+    .thumb-item {
+      min-width: 110px;
+      height: 60px;
+      background: var(--navy);
+      border: 1px solid rgba(181, 154, 112, 0.4);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s ease;
+      opacity: 0.6;
+    }
+
+    .thumb-item.active, .thumb-item:hover {
+      opacity: 1;
+      border-color: var(--gold-bright);
+      box-shadow: 0 0 10px rgba(181, 154, 112, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .thumb-item span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      color: var(--ivory);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAVIGATION HEADER -->
+  <div class="reader-header">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <i class="fa-solid fa-book-open" style="color:var(--gold); font-size:18px;"></i>
+      <div>
+        <div class="brand-title" contenteditable="true">SMP NEGERI 5 CILEGON — YEARBOOK</div>
+        <div style="font-size:10px; color:var(--gold-light); font-family:'DM Sans', sans-serif;">WE WERE HERE — The Chapter We Made (Angkatan 2026/2027)</div>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="nav-btn" onclick="prevSpread()"><i class="fa-solid fa-chevron-left"></i> PREV</button>
+
+      <select class="spread-select" id="spreadDropdown" onchange="jumpSpread(this.value)">
+        <option value="1">Spread 1 (Hal 01-02: Sampul Depan &amp; Belakang)</option>
+        <option value="2">Spread 2 (Hal 03-04: Daftar Isi &amp; Welcome Spread)</option>
+        <option value="3">Spread 3 (Hal 05-06: Profil Sekolah &amp; 3 Pilar)</option>
+        <option value="4">Spread 4 (Hal 07-08: Para Guru &amp; Tenaga Kependidikan)</option>
+        <option value="5">Spread 5 (Hal 09-10: Perjalanan Kami / Timeline)</option>
+        <option value="6">Spread 6 (Hal 11-12: Profil Kelas IX.1 &amp; Kegiatan)</option>
+        <option value="7">Spread 7 (Hal 13-14: Profil Siswa IX.1 Grid &amp; Film Strip)</option>
+        <option value="8">Spread 8 (Hal 15-16: Our Memories Polaroid &amp; Ekskul)</option>
+        <option value="9">Spread 9 (Hal 17-18: Words to Remember &amp; The Next Chapter)</option>
+        <option value="10">Spread 10 (Hal 19-20: E-Book Digital &amp; Panduan Produksi)</option>
+      </select>
+
+      <button class="nav-btn" onclick="nextSpread()">NEXT <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="nav-btn" onclick="toggleZoom()" title="Zoom Mode"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+    </div>
+  </div>
+
+  <!-- BOOK STAGE -->
+  <div class="reader-stage">
+    <div class="book-container" id="bookContainer">
+      <div class="book-spine-shadow"></div>
+
+      <!-- SPREAD 1 (HALAMAN 1 & 2): SAMPUL DEPAN & BELAKANG -->
+      <div class="spread-item active" id="spread1">
+        <!-- Halaman 1: Sampul Depan Hybrid -->
+        <div class="page-card page-card-navy" style="padding:32px; justify-content:space-between; background: radial-gradient(circle at top right, #2a3b4e, #202D3C);">
+          <span class="watermark-bg" style="bottom:-20px; right:-10px;">09</span>
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+              <div>
+                <p contenteditable="true" style="font-size:10px; font-weight:700; color:var(--ivory); letter-spacing:1.5px; margin:0;">SMP NEGERI 5 CILEGON</p>
+                <p contenteditable="true" style="font-size:9px; color:var(--gold); margin-top:2px;">YEARBOOK ANGKATAN 2026/2027</p>
+              </div>
+              <span class="gold-badge">OFFICIAL CONCEPT</span>
+            </div>
+
+            <div style="height:170px; border:1px solid var(--gold); overflow:hidden; position:relative; margin-bottom:16px;">
+              <img src="https://thearchitectsdiary.com/wp-content/uploads/2025/02/school-design-3-1024x681.png" style="width:100%; height:100%; object-fit:cover;">
+              <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(32,45,60,0.9)); padding:10px;">
+                <p contenteditable="true" style="font-size:9px; color:var(--ivory); font-style:italic; margin:0;">Gedung SMP Negeri 5 Cilegon</p>
+              </div>
+            </div>
+
+            <p contenteditable="true" style="font-size:11px; font-weight:700; color:var(--gold); letter-spacing:3px; margin-bottom:4px;">MAIN THEME</p>
+            <h1 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:42px; font-weight:900; color:var(--ivory); line-height:0.95; margin-bottom:10px;">WE WERE<br>HERE</h1>
+            <p contenteditable="true" style="font-family:'DM Sans', sans-serif; font-size:15px; color:var(--gold-light); font-weight:500; margin-bottom:12px;">09 — The Chapter We Made</p>
+            <div class="gold-line"></div>
+            <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:14px; color:#d8c3a5;">"Every face has a story. Every moment leaves a mark."</p>
+          </div>
+          <div class="footer-page" style="border-color:rgba(181, 154, 112, 0.4);">
+            <span contenteditable="true" style="color:var(--ivory);">SAMPUL DEPAN</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 01</span>
+          </div>
+        </div>
+
+        <!-- Halaman 2: Sampul Belakang -->
+        <div class="page-card page-card-navy" style="padding:40px; justify-content:space-between; text-align:center; background:#182330;">
+          <div style="text-align:left; border-bottom:1px solid rgba(181, 154, 112, 0.3); padding-bottom:10px;">
+            <p contenteditable="true" style="font-size:9px; color:var(--gold); letter-spacing:2px; font-weight:700;">SMP NEGERI 5 CILEGON</p>
+          </div>
+          <div style="padding:30px 0;">
+            <i class="fa-solid fa-quote-left" style="font-size:32px; color:var(--gold); opacity:0.7; margin-bottom:16px;"></i>
+            <h2 contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:36px; color:var(--ivory); font-weight:400; line-height:1.2; margin-bottom:16px;">
+              Thank you<br>for being part<br>of this journey.
+            </h2>
+            <div style="width:40px; height:2px; background:var(--gold); margin:20px auto;"></div>
+            <p contenteditable="true" style="font-size:11px; color:var(--gold-light); line-height:1.6; max-width:320px; margin:0 auto;">Buku ini adalah kumpulan cerita tentang perjalanan kita bersama di SMP Negeri 5 Cilegon.</p>
+          </div>
+          <div class="footer-page" style="border-color:rgba(181, 154, 112, 0.4);">
+            <span contenteditable="true" style="color:var(--ivory);">SAMPUL BELAKANG</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 02</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 2 (HALAMAN 3 & 4): DAFTAR ISI & WELCOME SPREAD -->
+      <div class="spread-item" id="spread2">
+        <!-- Halaman 3: Daftar Isi -->
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">09</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">TABLE OF CONTENTS</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:28px; font-weight:800; color:var(--navy); margin:0;">DAFTAR ISI</h2>
+            <div class="gold-line"></div>
+            
+            <div style="display:flex; gap:16px; margin-top:14px;">
+              <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">01 Sambutan</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 03</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">02 Profil Sekolah</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 05</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">03 Para Guru</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 07</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">04 Perjalanan Kami</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 09</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">05 Profil Kelas</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 11</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">06 Profil Siswa</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 13</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">07 Kenangan</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 15</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">08 Pesan &amp; Harapan</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 17</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:4px;">
+                  <span contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy);">09 Penutup</span>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--gold);">Hal 19</span>
+                </div>
+              </div>
+              <div style="width:140px; height:240px; border:1px solid var(--gold); overflow:hidden;">
+                <img src="https://thearchitectsdiary.com/wp-content/uploads/2025/02/school-design-3-1024x681.png" style="width:100%; height:100%; object-fit:cover;">
+              </div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">DAFTAR ISI</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 03</span>
+          </div>
+        </div>
+
+        <!-- Halaman 4: Welcome Spread -->
+        <div class="page-card">
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">WELCOME SPREAD</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:32px; font-weight:800; color:var(--navy); margin:0;">Welcome to Our Yearbook</h2>
+            <div class="gold-line"></div>
+            <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:16px; color:var(--gold); margin:8px 0;">"A journey of friendship, learning, and dreams."</p>
+            
+            <div style="height:210px; border:1px solid var(--gold); overflow:hidden; margin:10px 0;">
+              <img src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1771512694/asdk12org/bqet39frp41gazo0azox/IMG_6716.jpg" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            
+            <p contenteditable="true" style="font-size:10.5px; color:var(--charcoal); line-height:1.6; text-align:justify;">Buku ini adalah kumpulan cerita tentang perjalanan kita bersama di SMP Negeri 5 Cilegon. Tentang tawa, perjuangan, persahabatan, dan mimpi yang terus kita kejar bersama.</p>
+            <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:15px; font-weight:700; color:var(--navy); text-align:right; margin-top:8px;">We Were Here. And we'll always be.</p>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">OPENING SPREAD</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 04</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 3 (HALAMAN 5 & 6): PROFIL SEKOLAH & 3 PILAR -->
+      <div class="spread-item" id="spread3">
+        <!-- Halaman 5: Profil Sekolah -->
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">03</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">INSTITUTION PROFILE</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:28px; font-weight:800; color:var(--navy); margin:0;">Profil Sekolah</h2>
+            <p contenteditable="true" style="font-size:11px; font-weight:700; color:var(--gold); margin-bottom:4px;">SMP Negeri 5 Cilegon</p>
+            <div class="gold-line"></div>
+
+            <p contenteditable="true" style="font-size:10px; color:var(--charcoal); line-height:1.6; text-align:justify; margin:10px 0;">SMP Negeri 5 Cilegon merupakan sekolah yang telah berdiri dengan komitmen mewujudkan pendidikan berkualitas, berkarakter, dan berwawasan global.</p>
+
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+              <div style="height:75px; border:1px solid var(--gold); overflow:hidden;"><img src="https://thearchitectsdiary.com/wp-content/uploads/2025/02/school-design-3-1024x681.png" style="width:100%; height:100%; object-fit:cover;"></div>
+              <div style="height:75px; border:1px solid var(--gold); overflow:hidden;"><img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:100%; object-fit:cover;"></div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PROFIL SEKOLAH</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 05</span>
+          </div>
+        </div>
+
+        <!-- Halaman 6: 3 Pilar Utama -->
+        <div class="page-card">
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">CORE VALUES</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Pilar Kebanggaan</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:flex; flex-direction:column; gap:12px; margin:20px 0;">
+              <div style="background:#FFF; padding:12px; border:1px solid var(--gold); border-left:4px solid var(--navy); display:flex; align-items:center; gap:12px;">
+                <i class="fa-solid fa-trophy" style="font-size:24px; color:var(--gold);"></i>
+                <div>
+                  <h4 contenteditable="true" style="font-size:12px; font-weight:700; color:var(--navy); margin:0;">Berprestasi</h4>
+                  <p contenteditable="true" style="font-size:9.5px; color:var(--charcoal); margin-top:2px;">Mencetak prestasi akademik dan non-akademik di tingkat regional dan nasional.</p>
+                </div>
+              </div>
+
+              <div style="background:#FFF; padding:12px; border:1px solid var(--gold); border-left:4px solid var(--navy); display:flex; align-items:center; gap:12px;">
+                <i class="fa-solid fa-user-shield" style="font-size:24px; color:var(--gold);"></i>
+                <div>
+                  <h4 contenteditable="true" style="font-size:12px; font-weight:700; color:var(--navy); margin:0;">Berkarakter</h4>
+                  <p contenteditable="true" style="font-size:9.5px; color:var(--charcoal); margin-top:2px;">Membentuk siswa berakhlak mulia, berdisiplin tinggi, dan saling menghormati.</p>
+                </div>
+              </div>
+
+              <div style="background:#FFF; padding:12px; border:1px solid var(--gold); border-left:4px solid var(--navy); display:flex; align-items:center; gap:12px;">
+                <i class="fa-solid fa-globe" style="font-size:24px; color:var(--gold);"></i>
+                <div>
+                  <h4 contenteditable="true" style="font-size:12px; font-weight:700; color:var(--navy); margin:0;">Berwawasan Global</h4>
+                  <p contenteditable="true" style="font-size:9.5px; color:var(--charcoal); margin-top:2px;">Mempersiapkan siswa menghadapi tantangan era digital dengan bijak.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filler Box Bottom -->
+            <div style="background:var(--navy); color:var(--ivory); padding:10px; border-left:3px solid var(--gold); margin-top:10px;">
+              <p contenteditable="true" style="font-size:8.5px; font-weight:700; color:var(--gold); margin:0;">AKREDITASI SEKOLAH</p>
+              <p contenteditable="true" style="font-size:11px; font-weight:700; margin:2px 0;">Terakreditasi A (Unggul)</p>
+              <p contenteditable="true" style="font-size:8.5px; color:var(--gold-light); margin:0;">SMPN 5 Cilegon — Melayani dengan Hati, Mendidik dengan Karakter.</p>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PILAR SEKOLAH</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 06</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 4 (HALAMAN 7 & 8): PARA GURU & TENAGA KEPENDIDIKAN -->
+      <div class="spread-item" id="spread4">
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">04</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">HONORED FACULTY</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Para Guru &amp; Staf</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-top:10px;">
+              <div style="background:#FFF; border:1px solid var(--gold); padding:8px; text-align:center;">
+                <img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:90px; object-fit:cover; border:1px solid var(--gold);">
+                <p contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy); margin-top:4px;">Drs. H. Ahmad Fauzi</p>
+                <p contenteditable="true" style="font-size:8px; color:var(--gold); font-weight:600;">Kepala Sekolah</p>
+              </div>
+              <div style="background:#FFF; border:1px solid var(--gold); padding:8px; text-align:center;">
+                <img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:90px; object-fit:cover; border:1px solid var(--gold);">
+                <p contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy); margin-top:4px;">Hj. Siti Nurhaliza, M.Pd.</p>
+                <p contenteditable="true" style="font-size:8px; color:var(--gold); font-weight:600;">Wakil Kurikulum</p>
+              </div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PARA GURU</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 07</span>
+          </div>
+        </div>
+
+        <div class="page-card">
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">CLASS MENTORS</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Wali Kelas IX</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-top:10px;">
+              <div style="background:#FFF; border:1px solid var(--gold); padding:8px; text-align:center;">
+                <img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:90px; object-fit:cover; border:1px solid var(--gold);">
+                <p contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy); margin-top:4px;">Ahmad S., S.Pd.</p>
+                <p contenteditable="true" style="font-size:8px; color:var(--gold); font-weight:600;">Wali Kelas IX.1</p>
+              </div>
+              <div style="background:#FFF; border:1px solid var(--gold); padding:8px; text-align:center;">
+                <img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:90px; object-fit:cover; border:1px solid var(--gold);">
+                <p contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy); margin-top:4px;">Dewi Rahma, S.Pd.</p>
+                <p contenteditable="true" style="font-size:8px; color:var(--gold); font-weight:600;">Wali Kelas IX.2</p>
+              </div>
+            </div>
+
+            <!-- Teacher Note Filler -->
+            <div style="background:var(--navy); color:var(--ivory); padding:10px; border-left:3px solid var(--gold); margin-top:12px;">
+              <p contenteditable="true" style="font-size:8.5px; font-weight:700; color:var(--gold); margin:0;">PESAN DEWAN GURU</p>
+              <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:12px; margin:2px 0 0 0;">"Terbanglah tinggi meraih cita-cita, namun tetaplah membumi dengan kerendahan hati."</p>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">WALI KELAS</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 08</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 5 (HALAMAN 9 & 10): PERJALANAN KAMI / TIMELINE ANGKATAN -->
+      <div class="spread-item" id="spread5">
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">05</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">JOURNEY MILESTONES</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Perjalanan Kami</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
+              <div style="background:#FFF; padding:10px; border-left:3px solid var(--gold); border:1px solid rgba(181, 154, 112, 0.4);">
+                <span contenteditable="true" style="font-size:8.5px; font-weight:700; color:var(--gold);">2024 — MPLS &amp; AWAL KELAS VII</span>
+                <p contenteditable="true" style="font-size:10.5px; font-weight:700; color:var(--navy); margin:2px 0 0 0;">Langkah Pertama di SMPN 5</p>
+                <p contenteditable="true" style="font-size:9px; color:var(--charcoal);">Menyesuaikan diri dengan lingkungan baru, teman baru, dan guru baru.</p>
+              </div>
+
+              <div style="background:#FFF; padding:10px; border-left:3px solid var(--gold); border:1px solid rgba(181, 154, 112, 0.4);">
+                <span contenteditable="true" style="font-size:8.5px; font-weight:700; color:var(--gold);">2025 — KELAS VIII &amp; DOKUMENTASI</span>
+                <p contenteditable="true" style="font-size:10.5px; font-weight:700; color:var(--navy); margin:2px 0 0 0;">Membangun Persahabatan</p>
+                <p contenteditable="true" style="font-size:9px; color:var(--charcoal);">Aktif dalam ekstrakurikuler, perlombaan, dan kegiatan antar kelas.</p>
+              </div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PERJALANAN KAMI</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 09</span>
+          </div>
+        </div>
+
+        <div class="page-card">
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">FINAL CHAPTERS</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Masa Kelulusan Kelas IX</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
+              <div style="background:#FFF; padding:10px; border-left:3px solid var(--gold); border:1px solid rgba(181, 154, 112, 0.4);">
+                <span contenteditable="true" style="font-size:8.5px; font-weight:700; color:var(--gold);">2026/2027 — UJIAN &amp; KELULUSAN</span>
+                <p contenteditable="true" style="font-size:10.5px; font-weight:700; color:var(--navy); margin:2px 0 0 0;">Puncak Perjuangan Akademis</p>
+                <p contenteditable="true" style="font-size:9px; color:var(--charcoal);">Menghadapi ujian sekolah bersama-sama dan mempersiapkan pelepasan.</p>
+              </div>
+            </div>
+
+            <div style="height:110px; border:1px solid var(--gold); overflow:hidden; margin-top:10px;">
+              <img src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1771512694/asdk12org/bqet39frp41gazo0azox/IMG_6716.jpg" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PERJALANAN KAMI</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 10</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 6 (HALAMAN 11 & 12): PROFIL KELAS IX.1 & KEGIATAN -->
+      <div class="spread-item" id="spread6">
+        <!-- Halaman 11: Profil Kelas IX.1 -->
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">IX.1</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">CLASS PROFILE</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:28px; font-weight:800; color:var(--navy); margin:0;">Profil Kelas IX.1</h2>
+            <div class="gold-line"></div>
+            
+            <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:14px; color:var(--gold); margin:4px 0;">"Satu kelas, satu cerita, satu keluarga."</p>
+
+            <div style="height:175px; border:1px solid var(--gold); overflow:hidden; margin:10px 0;">
+              <img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+
+            <p contenteditable="true" style="font-size:10px; color:var(--charcoal); line-height:1.5;">Kelas IX.1 adalah gabungan dari keberagaman karakter yang bersatu. Dipimpin oleh Wali Kelas Ahmad S., S.Pd., kelas ini selalu solid dalam suka maupun duka.</p>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PROFIL KELAS IX.1</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 11</span>
+          </div>
+        </div>
+
+        <!-- Halaman 12: Dokumentasi Kegiatan Kelas -->
+        <div class="page-card">
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">CLASS ACTIVITIES</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:24px; font-weight:800; color:var(--navy); margin:0;">Dokumentasi IX.1</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; margin-top:10px;">
+              <div style="height:105px; border:1px solid var(--gold); overflow:hidden;"><img src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1771512694/asdk12org/bqet39frp41gazo0azox/IMG_6716.jpg" style="width:100%; height:100%; object-fit:cover;"></div>
+              <div style="height:105px; border:1px solid var(--gold); overflow:hidden;"><img src="https://media.easy-peasy.ai/3134ed2f-6b61-41f6-ade3-0a912e4ccb42/7dc82790-428c-4591-9f45-5a0432b1d02d_medium.webp" style="width:100%; height:100%; object-fit:cover;"></div>
+              <div style="height:105px; border:1px solid var(--gold); overflow:hidden;"><img src="https://thearchitectsdiary.com/wp-content/uploads/2025/02/school-design-3-1024x681.png" style="width:100%; height:100%; object-fit:cover;"></div>
+              <div style="height:105px; border:1px solid var(--gold); overflow:hidden;"><img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:100%; object-fit:cover;"></div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">DOKUMENTASI KELAS</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 12</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 7 (HALAMAN 13 & 14): PROFIL SISWA IX.1 (ZERO EMPTY SPACE) -->
+      <div class="spread-item" id="spread7">
+        <!-- Halaman 13: Profil Siswa Batch A -->
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-30px; right:-10px;">IX.1</span>
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--navy); padding-bottom:4px;">
+              <div>
+                <p contenteditable="true" style="font-size:8px; font-weight:700; color:var(--gold); letter-spacing:1px; margin:0;">STUDENT PROFILES</p>
+                <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:20px; font-weight:800; color:var(--navy); margin:0;">Profil Siswa IX.1</h2>
+              </div>
+              <span class="gold-badge">PARTS 01</span>
+            </div>
+
+            <!-- Student Grid 6 Cards -->
+            <div class="student-grid">
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://veda-app.s3.ap-south-1.amazonaws.com/veda-website/20260629104532XmhE8U70fgdpcXtBbV8Q0hNyw3UW71.jpg"></div>
+                <div class="student-name" contenteditable="true">Alya Putri</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://cdn.pokecut.com/resource/webseo/mobile_createbluepassport_handle_2025081516212175.webp"></div>
+                <div class="student-name" contenteditable="true">Rizky Pratama</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://cdn.pokecut.com/resource/webseo/mobile_createbluepassport_handle_2025081516212175.webp"></div>
+                <div class="student-name" contenteditable="true">Salsabila Nur</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://veda-app.s3.ap-south-1.amazonaws.com/veda-website/20260629104532XmhE8U70fgdpcXtBbV8Q0hNyw3UW71.jpg"></div>
+                <div class="student-name" contenteditable="true">Fahri Kamal</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://cdn.pokecut.com/resource/webseo/mobile_createbluepassport_handle_2025081516212175.webp"></div>
+                <div class="student-name" contenteditable="true">Nayla Azzahra</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://veda-app.s3.ap-south-1.amazonaws.com/veda-website/20260629104532XmhE8U70fgdpcXtBbV8Q0hNyw3UW71.jpg"></div>
+                <div class="student-name" contenteditable="true">Dimas Saputra</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+            </div>
+
+            <!-- Zero Space Filler: Class Mini Film Strip -->
+            <div class="bottom-filler-box">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span contenteditable="true" style="font-size:8px; font-weight:700; color:var(--gold);"><i class="fa-solid fa-film"></i> CLASS CANDID FILM STRIP</span>
+                <span contenteditable="true" style="font-size:7.5px; color:var(--gold-light);">IX.1 MEMORIES</span>
+              </div>
+              <div class="film-strip-grid">
+                <div class="film-strip-item"><img src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1771512694/asdk12org/bqet39frp41gazo0azox/IMG_6716.jpg"></div>
+                <div class="film-strip-item"><img src="https://media.easy-peasy.ai/3134ed2f-6b61-41f6-ade3-0a912e4ccb42/7dc82790-428c-4591-9f45-5a0432b1d02d_medium.webp"></div>
+                <div class="film-strip-item"><img src="https://thearchitectsdiary.com/wp-content/uploads/2025/02/school-design-3-1024x681.png"></div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PROFIL SISWA IX.1</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 13</span>
+          </div>
+        </div>
+
+        <!-- Halaman 14: Profil Siswa Batch B -->
+        <div class="page-card">
+          <span class="watermark-bg" style="bottom:-30px; left:-10px;">IX.1</span>
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--navy); padding-bottom:4px;">
+              <div>
+                <p contenteditable="true" style="font-size:8px; font-weight:700; color:var(--gold); letter-spacing:1px; margin:0;">STUDENT PROFILES</p>
+                <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:20px; font-weight:800; color:var(--navy); margin:0;">Profil Siswa IX.1</h2>
+              </div>
+              <span class="gold-badge">PARTS 02</span>
+            </div>
+
+            <!-- Student Grid 6 Cards -->
+            <div class="student-grid">
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://cdn.pokecut.com/resource/webseo/mobile_createbluepassport_handle_2025081516212175.webp"></div>
+                <div class="student-name" contenteditable="true">Bagas Aditya</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://veda-app.s3.ap-south-1.amazonaws.com/veda-website/20260629104532XmhE8U70fgdpcXtBbV8Q0hNyw3UW71.jpg"></div>
+                <div class="student-name" contenteditable="true">Citra Kirana</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://cdn.pokecut.com/resource/webseo/mobile_createbluepassport_handle_2025081516212175.webp"></div>
+                <div class="student-name" contenteditable="true">Doni Setiawan</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://veda-app.s3.ap-south-1.amazonaws.com/veda-website/20260629104532XmhE8U70fgdpcXtBbV8Q0hNyw3UW71.jpg"></div>
+                <div class="student-name" contenteditable="true">Eka Rahma</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://cdn.pokecut.com/resource/webseo/mobile_createbluepassport_handle_2025081516212175.webp"></div>
+                <div class="student-name" contenteditable="true">Farhan Majid</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+              <div class="student-card-luxe">
+                <div class="student-img-frame"><img src="https://veda-app.s3.ap-south-1.amazonaws.com/veda-website/20260629104532XmhE8U70fgdpcXtBbV8Q0hNyw3UW71.jpg"></div>
+                <div class="student-name" contenteditable="true">Gita Gutawa</div>
+                <div class="student-class" contenteditable="true">IX.1</div>
+              </div>
+            </div>
+
+            <!-- Zero Space Filler: Teacher's Note Box & Class Stats -->
+            <div class="teacher-note-box">
+              <p contenteditable="true" style="font-size:8px; font-weight:700; color:var(--gold); margin:0;">WALI KELAS IX.1 NOTE</p>
+              <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:12px; color:var(--navy); margin:2px 0;">"Anak-anakku, pertahankan semangat dan kerendahan hati kalian di masa depan."</p>
+              <span contenteditable="true" style="font-size:8.5px; font-weight:700; color:var(--gold);">Ahmad S., S.Pd.</span>
+            </div>
+
+            <div style="background:var(--navy); color:var(--ivory); padding:8px 10px; margin-top:6px; display:flex; justify-content:space-between; align-items:center;">
+              <span contenteditable="true" style="font-size:8px; font-weight:700; color:var(--gold);">STATISTIK KELAS</span>
+              <span contenteditable="true" style="font-size:8px;">Total Siswa: 35 | L: 17, P: 18</span>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PROFIL SISWA IX.1</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 14</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 8 (HALAMAN 15 & 16): OUR MEMORIES POLAROID & EKSTRAKURIKULER -->
+      <div class="spread-item" id="spread8">
+        <!-- Halaman 15: Our Memories Polaroid -->
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">07</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">PHOTO ALBUM</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Our Memories</h2>
+            <div class="gold-line"></div>
+
+            <div style="position:relative; height:340px; margin-top:10px;">
+              <!-- Polaroid 1 -->
+              <div style="position:absolute; top:10px; left:10px; width:160px; background:#FFF; padding:6px 6px 18px 6px; transform:rotate(-5deg); box-shadow:0 8px 16px rgba(0,0,0,0.15); border:1px solid #EEE;">
+                <img src="https://media.easy-peasy.ai/a3e0c186-97a9-4d4d-abe8-9ea2648db596/b9cf1048-48ae-475f-9d84-57a1033eb491_medium.webp" style="width:100%; height:110px; object-fit:cover;">
+                <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:11px; text-align:center; margin-top:4px;">Kebersamaan IX.1</p>
+              </div>
+
+              <!-- Polaroid 2 -->
+              <div style="position:absolute; top:30px; right:15px; width:165px; background:#FFF; padding:6px 6px 18px 6px; transform:rotate(4deg); box-shadow:0 8px 16px rgba(0,0,0,0.15); border:1px solid #EEE;">
+                <img src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1771512694/asdk12org/bqet39frp41gazo0azox/IMG_6716.jpg" style="width:100%; height:115px; object-fit:cover;">
+                <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:11px; text-align:center; margin-top:4px;">Classmeet 2025</p>
+              </div>
+
+              <!-- Sticky Note -->
+              <div style="position:absolute; bottom:20px; left:40px; width:140px; background:#F8E8C8; padding:10px; transform:rotate(-2deg); box-shadow:0 4px 10px rgba(0,0,0,0.1); border-left:3px solid var(--gold);">
+                <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:14px; font-weight:700; color:var(--navy); text-align:center; margin:0;">Good Times!</p>
+              </div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">OUR MEMORIES</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 15</span>
+          </div>
+        </div>
+
+        <!-- Halaman 16: Ekstrakurikuler -->
+        <div class="page-card">
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">STUDENT ACTIVITIES</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Ekstrakurikuler</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-top:12px;">
+              <div style="background:#FFF; padding:6px; border:1px solid var(--gold);">
+                <img src="https://media.easy-peasy.ai/3134ed2f-6b61-41f6-ade3-0a912e4ccb42/7dc82790-428c-4591-9f45-5a0432b1d02d_medium.webp" style="width:100%; height:90px; object-fit:cover;">
+                <p contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy); margin-top:4px;">OSIS &amp; Pramuka</p>
+              </div>
+              <div style="background:#FFF; padding:6px; border:1px solid var(--gold);">
+                <img src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1771512694/asdk12org/bqet39frp41gazo0azox/IMG_6716.jpg" style="width:100%; height:90px; object-fit:cover;">
+                <p contenteditable="true" style="font-size:10px; font-weight:700; color:var(--navy); margin-top:4px;">Paskibra &amp; Olahraga</p>
+              </div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">EKSTRAKURIKULER</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 16</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 9 (HALAMAN 17 & 18): WORDS TO REMEMBER & THE NEXT CHAPTER -->
+      <div class="spread-item" id="spread9">
+        <!-- Halaman 17: Words to Remember -->
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">08</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">INSPIRATIONAL QUOTES</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--navy); margin:0;">Words to Remember</h2>
+            <div class="gold-line"></div>
+
+            <div style="padding:20px 10px; text-align:center;">
+              <i class="fa-solid fa-quote-left" style="font-size:28px; color:var(--gold); opacity:0.6; margin-bottom:10px;"></i>
+              <h3 contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:22px; color:var(--navy); line-height:1.4;">
+                "Sekolah bukan hanya tempat belajar, tetapi juga tempat kita tumbuh, berteman, dan bermimpi."
+              </h3>
+            </div>
+
+            <div style="height:120px; border:1px solid var(--gold); overflow:hidden; margin-top:10px;">
+              <img src="https://thearchitectsdiary.com/wp-content/uploads/2025/02/school-design-3-1024x681.png" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">WORDS TO REMEMBER</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 17</span>
+          </div>
+        </div>
+
+        <!-- Halaman 18: The Next Chapter -->
+        <div class="page-card page-card-navy" style="padding:32px; justify-content:space-between; background:linear-gradient(135deg, #202D3C, #121a24);">
+          <div style="text-align:right;">
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:4px;">CLOSING CHAPTER</p>
+            <h2 contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:42px; font-weight:400; color:var(--ivory); line-height:1;">The Next<br>Chapter</h2>
+          </div>
+
+          <div style="height:150px; border:1px solid var(--gold); overflow:hidden; margin:16px 0;">
+            <img src="https://media.easy-peasy.ai/8b1a75e3-fc65-43e3-b23a-4d10c5f2da17/55510b54-c708-4891-9dbb-55586ce9db55_medium.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.75;">
+          </div>
+
+          <div style="text-align:right;">
+            <p contenteditable="true" style="font-size:13px; font-weight:700; color:var(--gold);">One chapter ends, another begins...</p>
+            <p contenteditable="true" style="font-size:10px; color:var(--ivory); margin-top:2px;">Sampai jumpa di puncak kesuksesan!</p>
+          </div>
+          <div class="footer-page" style="border-color:rgba(181, 154, 112, 0.4);">
+            <span contenteditable="true" style="color:var(--ivory);">THE NEXT CHAPTER</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 18</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 10 (HALAMAN 19 & 20): BUKU DIGITAL & PANDUAN PRODUKSI -->
+      <div class="spread-item" id="spread10">
+        <!-- Halaman 19: Buku Digital & QR Code -->
+        <div class="page-card">
+          <span class="watermark-bg" style="top:-20px; right:-10px;">09</span>
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">DIGITAL EXTENSION</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:24px; font-weight:800; color:var(--navy); margin:0;">Buku Digital &amp; QR</h2>
+            <div class="gold-line"></div>
+
+            <p contenteditable="true" style="font-size:10px; color:var(--charcoal); margin:10px 0;">Kenangan, kita, kini lebih dekat di genggaman. Akses galeri foto HD dan video angkatan melalui QR Code resmi.</p>
+
+            <div style="display:flex; gap:14px; align-items:center; background:#FFF; padding:12px; border:1px solid var(--gold); margin-top:12px;">
+              <i class="fa-solid fa-qrcode" style="font-size:70px; color:var(--navy);"></i>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <i class="fa-solid fa-check" style="color:var(--gold); font-size:10px;"></i>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--navy);">Galeri Foto Angkatan</span>
+                </div>
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <i class="fa-solid fa-check" style="color:var(--gold); font-size:10px;"></i>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--navy);">Video Kenangan Kelas</span>
+                </div>
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <i class="fa-solid fa-check" style="color:var(--gold); font-size:10px;"></i>
+                  <span contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--navy);">E-book Flipbook Interaktif</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">BUKU DIGITAL &amp; QR</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 19</span>
+          </div>
+        </div>
+
+        <!-- Halaman 20: Panduan Produksi & QC -->
+        <div class="page-card">
+          <div>
+            <p contenteditable="true" style="font-size:9px; font-weight:700; color:var(--gold); letter-spacing:2px; margin-bottom:2px;">PRODUCTION GUIDE</p>
+            <h2 contenteditable="true" style="font-family:'Playfair Display', serif; font-size:24px; font-weight:800; color:var(--navy); margin:0;">Panduan Produksi</h2>
+            <div class="gold-line"></div>
+
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+              <div style="background:#FFF; padding:8px; border:1px solid var(--gold); border-left:3px solid var(--navy);">
+                <p contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--navy); margin:0;">Standar Foto &amp; Cetak</p>
+                <p contenteditable="true" style="font-size:8.5px; color:var(--charcoal); margin-top:2px;">Jas/Seragam Resmi, Latar Netral Ivory, Cetak Full Color Art Paper 150gsm, Hardcover Doff + Spot UV.</p>
+              </div>
+
+              <div style="background:#FFF; padding:8px; border:1px solid var(--gold); border-left:3px solid var(--navy);">
+                <p contenteditable="true" style="font-size:9.5px; font-weight:700; color:var(--navy); margin:0;">Simulasi Jumlah Halaman</p>
+                <p contenteditable="true" style="font-size:8.5px; color:var(--charcoal); margin-top:2px;">100 – 136 Halaman (Kelipatan 16 untuk spesifikasi cetak jilid benang lem panas).</p>
+              </div>
+            </div>
+
+            <div style="background:var(--navy); color:var(--ivory); padding:10px; text-align:center; margin-top:10px;">
+              <p contenteditable="true" style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:14px; color:var(--gold-light); margin:0;">"Bersama, kita wujudkan buku kenangan terbaik!"</p>
+            </div>
+          </div>
+          <div class="footer-page">
+            <span contenteditable="true" style="color:var(--navy);">PANDUAN PRODUKSI</span>
+            <span contenteditable="true" style="color:var(--gold);">HALAMAN 20</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- THUMBNAIL STRIP -->
+  <div class="thumb-bar">
+    <div class="thumb-item active" onclick="jumpSpread(1)" id="thumb1"><span>Spread 1</span><span>Cover</span></div>
+    <div class="thumb-item" onclick="jumpSpread(2)" id="thumb2"><span>Spread 2</span><span>Daftar Isi</span></div>
+    <div class="thumb-item" onclick="jumpSpread(3)" id="thumb3"><span>Spread 3</span><span>Profil</span></div>
+    <div class="thumb-item" onclick="jumpSpread(4)" id="thumb4"><span>Spread 4</span><span>Para Guru</span></div>
+    <div class="thumb-item" onclick="jumpSpread(5)" id="thumb5"><span>Spread 5</span><span>Timeline</span></div>
+    <div class="thumb-item" onclick="jumpSpread(6)" id="thumb6"><span>Spread 6</span><span>Kelas IX.1</span></div>
+    <div class="thumb-item" onclick="jumpSpread(7)" id="thumb7"><span>Spread 7</span><span>Siswa Grid</span></div>
+    <div class="thumb-item" onclick="jumpSpread(8)" id="thumb8"><span>Spread 8</span><span>Memories</span></div>
+    <div class="thumb-item" onclick="jumpSpread(9)" id="thumb9"><span>Spread 9</span><span>Quotes</span></div>
+    <div class="thumb-item" onclick="jumpSpread(10)" id="thumb10"><span>Spread 10</span><span>QR &amp; QC</span></div>
+  </div>
+
+  <script>
+    let activeSpread = 1;
+    const maxSpreads = 10;
+    let isZoomed = false;
+
+    function updateReaderView() {
+      for (let i = 1; i <= maxSpreads; i++) {
+        const spreadEl = document.getElementById('spread' + i);
+        const thumbEl = document.getElementById('thumb' + i);
+        if (spreadEl) {
+          if (i === activeSpread) {
+            spreadEl.classList.add('active');
+          } else {
+            spreadEl.classList.remove('active');
+          }
+        }
+        if (thumbEl) {
+          if (i === activeSpread) {
+            thumbEl.classList.add('active');
+          } else {
+            thumbEl.classList.remove('active');
+          }
+        }
+      }
+
+      const dropdown = document.getElementById('spreadDropdown');
+      if (dropdown) dropdown.value = activeSpread;
+    }
+
+    function prevSpread() {
+      if (activeSpread > 1) {
+        activeSpread--;
+        updateReaderView();
+      }
+    }
+
+    function nextSpread() {
+      if (activeSpread < maxSpreads) {
+        activeSpread++;
+        updateReaderView();
+      }
+    }
+
+    function jumpSpread(spreadNum) {
+      activeSpread = parseInt(spreadNum);
+      updateReaderView();
+    }
+
+    function toggleZoom() {
+      const container = document.getElementById('bookContainer');
+      if (container) {
+        isZoomed = !isZoomed;
+        container.style.transform = isZoomed ? 'scale(1.12)' : 'scale(1)';
+      }
+    }
+  </script>
+</body>
+</html>
